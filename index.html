@@ -158,12 +158,12 @@ button{cursor:pointer;border:0;border-radius:10px;padding:13px 18px;font-size:16
 <div class="row"><span>Imposta di bollo</span><strong>€ 16,00</strong></div>
 <div class="row"><span>Digitalizzazione pratica</span><strong>€ 2,35</strong></div>
 <div class="row"><span>Commissione agenzia (imponibile)</span><strong id="commout">€ 0,00</strong></div>
-<div class="row"><span>IVA 22% su commissione</span><strong id="ivaout">€ 0,00</strong></div>
-<div class="row"><span>Commissione agenzia IVA inclusa</span><strong id="commlordout">€ 0,00</strong></div>
+<div class="row"><span>Imponibile IVA (commissione + digitalizzazione)</span><strong id="ivabaseout">€ 0,00</strong></div>
+<div class="row"><span>IVA 22%</span><strong id="ivaout">€ 0,00</strong></div>
 <div class="total"><span>TOTALE</span><span id="total">€ 0,00</span></div>
 <div class="actions"><button id="copy" class="secondary">Copia preventivo</button><button class="secondary" onclick="window.print()">Stampa</button><button id="reset" class="secondary">Azzera</button></div>
 </div>
-<p class="note">Versione per passaggi ordinari. Calcolo IPT autoveicoli oltre 53 kW con coefficiente 3,5119 e arrotondamento finale all’euro. Non applica automaticamente esenzioni, riduzioni o casistiche speciali. Le spese fisse escluse IPT e commissione sono € 107,11. L’IVA al 22% viene calcolata automaticamente solo sulla commissione agenzia inserita.</p>
+<p class="note">Versione per passaggi ordinari. Calcolo IPT autoveicoli oltre 53 kW con coefficiente 3,5119 e arrotondamento finale all’euro. Non applica automaticamente esenzioni, riduzioni o casistiche speciali. Le spese fisse escluse IPT e commissione sono € 107,11. L’IVA al 22% viene calcolata automaticamente sulla commissione agenzia più € 2,35 di digitalizzazione pratica.</p>
 </section></main>
 <script>
 (function(){
@@ -179,14 +179,14 @@ function calc(){
  if($("tipo").value==="auto"){val=parseFloat($("kw").value);if(!(val>0)){alert("Inserisci la potenza in kW.");return;}base=val<=53?150.81:3.5119*val;}
  else{val=parseFloat($("port").value);if(!(val>0)){alert("Inserisci la portata in kg.");return;}base=truckBase(val/100);}
  var ipt=Math.round(base*(1+pct/100)), comm=parseFloat($("comm").value);if(!(comm>=0))comm=0;
- var iva=Math.round(comm*22)/100;var commLord=comm+iva;$("ipt").textContent=eur(ipt);$("commout").textContent=eur(comm);$("ivaout").textContent=eur(iva);$("commlordout").textContent=eur(commLord);$("total").textContent=eur(ipt+107.11+commLord);$("result").style.display="block";
+ var ivaBase=comm+2.35;var iva=Math.round(ivaBase*22)/100;$("ipt").textContent=eur(ipt);$("commout").textContent=eur(comm);$("ivabaseout").textContent=eur(ivaBase);$("ivaout").textContent=eur(iva);$("total").textContent=eur(ipt+107.11+comm+iva);$("result").style.display="block";
 }
 $("calculate").addEventListener("click",calc);
 $("prov").addEventListener("change",updateBadge);
 $("tipo").addEventListener("change",switchType);
 $("reset").addEventListener("click",function(){$("kw").value="";$("port").value="";$("comm").value="";$("result").style.display="none";});
 $("copy").addEventListener("click",function(){
- var text="PREVENTIVO PASSAGGIO DI PROPRIETÀ\nProvincia: "+$("prov").value+"\nIPT: "+$("ipt").textContent+"\nEmolumenti ACI: € 27,00\nSpese Motorizzazione: € 61,76\nImposta di bollo: € 16,00\nDigitalizzazione pratica: € 2,35\nCommissione agenzia imponibile: "+$("commout").textContent+"\nIVA 22%: "+$("ivaout").textContent+"\nCommissione IVA inclusa: "+$("commlordout").textContent+"\nTOTALE: "+$("total").textContent;
+ var text="PREVENTIVO PASSAGGIO DI PROPRIETÀ\nProvincia: "+$("prov").value+"\nIPT: "+$("ipt").textContent+"\nEmolumenti ACI: € 27,00\nSpese Motorizzazione: € 61,76\nImposta di bollo: € 16,00\nDigitalizzazione pratica: € 2,35\nCommissione agenzia imponibile: "+$("commout").textContent+"\nImponibile IVA (commissione + digitalizzazione): "+$("ivabaseout").textContent+"\nIVA 22%: "+$("ivaout").textContent+"\nTOTALE: "+$("total").textContent;
  if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){alert("Preventivo copiato.");},function(){window.prompt("Copia il preventivo:",text);});
  else window.prompt("Copia il preventivo:",text);
 });
