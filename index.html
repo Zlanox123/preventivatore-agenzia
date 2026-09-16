@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Preventivatore Passaggio di Proprietà</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eef4f8;font-family:Segoe UI,Arial,sans-serif;color:#17324d}
+main{max-width:820px;margin:35px auto;padding:18px}
+.card{background:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+h1{margin:0 0 5px} .sub{margin:0 0 25px;color:#667b8f}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{font-weight:600;display:block;margin-bottom:6px}
+input,select{width:100%;padding:12px;border:1px solid #c9d7e3;border-radius:9px;font-size:16px}
+.full{grid-column:1/-1}
+button{cursor:pointer;border:0;border-radius:10px;padding:13px 18px;font-size:16px;font-weight:700}
+.calc{width:100%;background:#1688d4;color:white;margin-top:5px}
+#result{display:none;margin-top:24px;border-top:1px solid #dde7ee;padding-top:15px}
+.row{display:flex;justify-content:space-between;padding:8px 2px}
+.row span:first-child{color:#607487}
+.total{display:flex;justify-content:space-between;background:#e6f4ff;padding:17px;border-radius:11px;font-size:22px;font-weight:800;margin-top:10px;color:#0874b8}
+.actions{display:flex;gap:10px;margin-top:18px} .secondary{background:#e9f0f5;color:#17324d}
+.badge{display:inline-block;background:#edf6fc;padding:6px 10px;border-radius:999px;font-size:13px;color:#496a83}
+.note{margin-top:18px;color:#738596;font-size:12px;line-height:1.5}
+@media(max-width:650px){main{margin:0;padding:10px}.card{padding:18px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+@media print{body{background:white}main{margin:0;max-width:none}.card{box-shadow:none}.actions,.note,.calc{display:none!important}}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1688d4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Preventivatore">
+<link rel="apple-touch-icon" href="icon-180.png">
+
+</head>
+<body>
+<main><section class="card">
+<h1>Preventivo passaggio di proprietà</h1>
+<p class="sub">Calcolatore locale — funziona senza connessione Internet</p>
+<div class="grid">
+<div><label>Provincia</label><select id="prov"><option value="Agrigento">Agrigento</option>
+<option value="Alessandria">Alessandria</option>
+<option value="Ancona">Ancona</option>
+<option value="Aosta">Aosta</option>
+<option value="Arezzo">Arezzo</option>
+<option value="Ascoli Piceno">Ascoli Piceno</option>
+<option value="Asti">Asti</option>
+<option value="Avellino">Avellino</option>
+<option value="Bari">Bari</option>
+<option value="Barletta-Andria-Trani">Barletta-Andria-Trani</option>
+<option value="Belluno">Belluno</option>
+<option value="Benevento">Benevento</option>
+<option value="Bergamo">Bergamo</option>
+<option value="Biella">Biella</option>
+<option value="Bologna">Bologna</option>
+<option value="Bolzano">Bolzano</option>
+<option value="Brescia">Brescia</option>
+<option value="Brindisi">Brindisi</option>
+<option value="Cagliari">Cagliari</option>
+<option value="Caltanissetta">Caltanissetta</option>
+<option value="Campobasso">Campobasso</option>
+<option value="Caserta">Caserta</option>
+<option value="Catania">Catania</option>
+<option value="Catanzaro">Catanzaro</option>
+<option value="Chieti">Chieti</option>
+<option value="Como">Como</option>
+<option value="Cosenza">Cosenza</option>
+<option value="Cremona">Cremona</option>
+<option value="Crotone">Crotone</option>
+<option value="Cuneo">Cuneo</option>
+<option value="Enna">Enna</option>
+<option value="Fermo">Fermo</option>
+<option value="Ferrara">Ferrara</option>
+<option value="Firenze">Firenze</option>
+<option value="Foggia">Foggia</option>
+<option value="Forlì-Cesena">Forlì-Cesena</option>
+<option value="Frosinone">Frosinone</option>
+<option value="Genova">Genova</option>
+<option value="Grosseto">Grosseto</option>
+<option value="Imperia">Imperia</option>
+<option value="Isernia">Isernia</option>
+<option value="L&#x27;Aquila">L&#x27;Aquila</option>
+<option value="La Spezia">La Spezia</option>
+<option value="Latina">Latina</option>
+<option value="Lecce" selected>Lecce</option>
+<option value="Lecco">Lecco</option>
+<option value="Livorno">Livorno</option>
+<option value="Lodi">Lodi</option>
+<option value="Lucca">Lucca</option>
+<option value="Macerata">Macerata</option>
+<option value="Mantova">Mantova</option>
+<option value="Massa Carrara">Massa Carrara</option>
+<option value="Matera">Matera</option>
+<option value="Messina">Messina</option>
+<option value="Milano">Milano</option>
+<option value="Modena">Modena</option>
+<option value="Monza e Brianza">Monza e Brianza</option>
+<option value="Napoli">Napoli</option>
+<option value="Novara">Novara</option>
+<option value="Nuoro">Nuoro</option>
+<option value="Oristano">Oristano</option>
+<option value="Padova">Padova</option>
+<option value="Palermo">Palermo</option>
+<option value="Parma">Parma</option>
+<option value="Pavia">Pavia</option>
+<option value="Perugia">Perugia</option>
+<option value="Pesaro Urbino">Pesaro Urbino</option>
+<option value="Pescara">Pescara</option>
+<option value="Piacenza">Piacenza</option>
+<option value="Pisa">Pisa</option>
+<option value="Pistoia">Pistoia</option>
+<option value="Potenza">Potenza</option>
+<option value="Prato">Prato</option>
+<option value="Ragusa">Ragusa</option>
+<option value="Ravenna">Ravenna</option>
+<option value="Reggio Calabria">Reggio Calabria</option>
+<option value="Reggio Emilia">Reggio Emilia</option>
+<option value="Rieti">Rieti</option>
+<option value="Rimini">Rimini</option>
+<option value="Roma">Roma</option>
+<option value="Rovigo">Rovigo</option>
+<option value="Salerno">Salerno</option>
+<option value="Sassari">Sassari</option>
+<option value="Savona">Savona</option>
+<option value="Siena">Siena</option>
+<option value="Siracusa">Siracusa</option>
+<option value="Sondrio">Sondrio</option>
+<option value="Sud Sardegna">Sud Sardegna</option>
+<option value="Taranto">Taranto</option>
+<option value="Teramo">Teramo</option>
+<option value="Terni">Terni</option>
+<option value="Torino">Torino</option>
+<option value="Trapani">Trapani</option>
+<option value="Trento">Trento</option>
+<option value="Treviso">Treviso</option>
+<option value="Varese">Varese</option>
+<option value="Venezia">Venezia</option>
+<option value="Verbano-Cusio-Ossola">Verbano-Cusio-Ossola</option>
+<option value="Vercelli">Vercelli</option>
+<option value="Verona">Verona</option>
+<option value="Vibo Valentia">Vibo Valentia</option>
+<option value="Vicenza">Vicenza</option>
+<option value="Viterbo">Viterbo</option></select></div>
+<div><label>Tipo veicolo</label><select id="tipo"><option value="auto">Autovettura / autoveicolo</option><option value="truck">Autocarro / trasporto cose</option></select></div>
+<div id="kwbox"><label>Potenza (kW)</label><input id="kw" type="number" min="1" step="1" placeholder="es. 110"></div>
+<div id="portbox" style="display:none"><label>Portata (quintali)</label><input id="port" type="number" min="0.01" step="0.01" placeholder="es. 12,5"></div>
+<div><label>Commissione agenzia imponibile (€)</label><input id="comm" type="number" min="0" step="0.01" placeholder="es. 80"></div>
+<div class="full"><span class="badge" id="badge">Maggiorazione IPT: 30%</span></div>
+<div class="full"><button id="calculate" class="calc" type="button">CALCOLA PREVENTIVO</button></div>
+</div>
+
+<div id="result">
+<div class="row"><span>IPT</span><strong id="ipt">€ 0,00</strong></div>
+<div class="row"><span>Emolumenti ACI</span><strong>€ 27,00</strong></div>
+<div class="row"><span>Spese Motorizzazione</span><strong>€ 61,76</strong></div>
+<div class="row"><span>Imposta di bollo</span><strong>€ 16,00</strong></div>
+<div class="row"><span>Digitalizzazione pratica</span><strong>€ 2,35</strong></div>
+<div class="row"><span>Commissione agenzia (imponibile)</span><strong id="commout">€ 0,00</strong></div>
+<div class="row"><span>IVA 22% su commissione</span><strong id="ivaout">€ 0,00</strong></div>
+<div class="row"><span>Commissione agenzia IVA inclusa</span><strong id="commlordout">€ 0,00</strong></div>
+<div class="total"><span>TOTALE</span><span id="total">€ 0,00</span></div>
+<div class="actions"><button id="copy" class="secondary">Copia preventivo</button><button class="secondary" onclick="window.print()">Stampa</button><button id="reset" class="secondary">Azzera</button></div>
+</div>
+<p class="note">Versione per passaggi ordinari. Calcolo IPT autoveicoli oltre 53 kW con coefficiente 3,5119 e arrotondamento finale all’euro. Non applica automaticamente esenzioni, riduzioni o casistiche speciali. Le spese fisse escluse IPT e commissione sono € 107,11. L’IVA al 22% viene calcolata automaticamente solo sulla commissione agenzia inserita.</p>
+</section></main>
+<script>
+(function(){
+"use strict";
+var rates={'Agrigento':30,'Alessandria':30,'Ancona':30,'Aosta':0,'Arezzo':20,'Ascoli Piceno':30,'Asti':30,'Avellino':20,'Bari':30,'Barletta-Andria-Trani':30,'Belluno':30,'Benevento':20,'Bergamo':30,'Biella':30,'Bologna':30,'Bolzano':0,'Brescia':30,'Brindisi':30,'Cagliari':30,'Caltanissetta':30,'Campobasso':30,'Caserta':30,'Catania':30,'Catanzaro':30,'Chieti':30,'Como':30,'Cosenza':30,'Cremona':30,'Crotone':25,'Cuneo':30,'Enna':30,'Fermo':30,'Ferrara':25,'Firenze':30,'Foggia':30,'Forlì-Cesena':30,'Frosinone':30,'Genova':30,'Grosseto':20,'Imperia':30,'Isernia':30,"L'Aquila":30,'La Spezia':30,'Latina':20,'Lecce':30,'Lecco':30,'Livorno':30,'Lodi':30,'Lucca':30,'Macerata':30,'Mantova':30,'Massa Carrara':30,'Matera':30,'Messina':30,'Milano':30,'Modena':30,'Monza e Brianza':30,'Napoli':30,'Novara':30,'Nuoro':30,'Oristano':30,'Padova':30,'Palermo':30,'Parma':30,'Pavia':30,'Perugia':30,'Pesaro Urbino':30,'Pescara':30,'Piacenza':30,'Pisa':30,'Pistoia':30,'Potenza':30,'Prato':30,'Ragusa':30,'Ravenna':30,'Reggio Calabria':30,'Reggio Emilia':20,'Rieti':30,'Rimini':30,'Roma':30,'Rovigo':30,'Salerno':30,'Sassari':30,'Savona':30,'Siena':30,'Siracusa':30,'Sondrio':25,'Sud Sardegna':30,'Taranto':30,'Teramo':30,'Terni':30,'Torino':30,'Trapani':30,'Trento':0,'Treviso':30,'Varese':30,'Venezia':30,'Verbano-Cusio-Ossola':30,'Vercelli':30,'Verona':30,'Vibo Valentia':30,'Vicenza':20,'Viterbo':30};
+function $(id){return document.getElementById(id);}
+function eur(n){return "€ "+Number(n).toFixed(2).replace(".",",");}
+function truckBase(q){if(q<=7)return 199.35;if(q<=15)return 290.25;if(q<=30)return 326.40;if(q<=45)return 380.63;if(q<=60)return 452.93;if(q<=80)return 519.56;return 646.60;}
+function updateBadge(){$("badge").textContent="Maggiorazione IPT: "+(rates[$("prov").value]||0)+"%";}
+function switchType(){var a=$("tipo").value==="auto";$("kwbox").style.display=a?"block":"none";$("portbox").style.display=a?"none":"block";}
+function calc(){
+ var pct=rates[$("prov").value]||0, base=0, val;
+ if($("tipo").value==="auto"){val=parseFloat($("kw").value);if(!(val>0)){alert("Inserisci la potenza in kW.");return;}base=val<=53?150.81:3.5119*val;}
+ else{val=parseFloat($("port").value);if(!(val>0)){alert("Inserisci la portata in quintali.");return;}base=truckBase(val);}
+ var ipt=Math.round(base*(1+pct/100)), comm=parseFloat($("comm").value);if(!(comm>=0))comm=0;
+ var iva=Math.round(comm*22)/100;var commLord=comm+iva;$("ipt").textContent=eur(ipt);$("commout").textContent=eur(comm);$("ivaout").textContent=eur(iva);$("commlordout").textContent=eur(commLord);$("total").textContent=eur(ipt+107.11+commLord);$("result").style.display="block";
+}
+$("calculate").addEventListener("click",calc);
+$("prov").addEventListener("change",updateBadge);
+$("tipo").addEventListener("change",switchType);
+$("reset").addEventListener("click",function(){$("kw").value="";$("port").value="";$("comm").value="";$("result").style.display="none";});
+$("copy").addEventListener("click",function(){
+ var text="PREVENTIVO PASSAGGIO DI PROPRIETÀ\nProvincia: "+$("prov").value+"\nIPT: "+$("ipt").textContent+"\nEmolumenti ACI: € 27,00\nSpese Motorizzazione: € 61,76\nImposta di bollo: € 16,00\nDigitalizzazione pratica: € 2,35\nCommissione agenzia imponibile: "+$("commout").textContent+"\nIVA 22%: "+$("ivaout").textContent+"\nCommissione IVA inclusa: "+$("commlordout").textContent+"\nTOTALE: "+$("total").textContent;
+ if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){alert("Preventivo copiato.");},function(){window.prompt("Copia il preventivo:",text);});
+ else window.prompt("Copia il preventivo:",text);
+});
+updateBadge();switchType();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+  });
+}
+</script>
+
+</body></html>
