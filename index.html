@@ -145,7 +145,7 @@ button{cursor:pointer;border:0;border-radius:10px;padding:13px 18px;font-size:16
 <option value="Viterbo">Viterbo</option></select></div>
 <div><label>Tipo veicolo</label><select id="tipo"><option value="auto">Autovettura / autoveicolo</option><option value="truck">Autocarro / trasporto cose</option></select></div>
 <div id="kwbox"><label>Potenza (kW)</label><input id="kw" type="number" min="1" step="1" placeholder="es. 110"></div>
-<div id="portbox" style="display:none"><label>Portata (quintali)</label><input id="port" type="number" min="0.01" step="0.01" placeholder="es. 12,5"></div>
+<div id="portbox" style="display:none"><label>Portata (kg)</label><input id="port" type="number" min="1" step="1" placeholder="es. 1250"></div>
 <div><label>Commissione agenzia imponibile (€)</label><input id="comm" type="number" min="0" step="0.01" placeholder="es. 80"></div>
 <div class="full"><span class="badge" id="badge">Maggiorazione IPT: 30%</span></div>
 <div class="full"><button id="calculate" class="calc" type="button">CALCOLA PREVENTIVO</button></div>
@@ -177,7 +177,7 @@ function switchType(){var a=$("tipo").value==="auto";$("kwbox").style.display=a?
 function calc(){
  var pct=rates[$("prov").value]||0, base=0, val;
  if($("tipo").value==="auto"){val=parseFloat($("kw").value);if(!(val>0)){alert("Inserisci la potenza in kW.");return;}base=val<=53?150.81:3.5119*val;}
- else{val=parseFloat($("port").value);if(!(val>0)){alert("Inserisci la portata in quintali.");return;}base=truckBase(val);}
+ else{val=parseFloat($("port").value);if(!(val>0)){alert("Inserisci la portata in kg.");return;}base=truckBase(val/100);}
  var ipt=Math.round(base*(1+pct/100)), comm=parseFloat($("comm").value);if(!(comm>=0))comm=0;
  var iva=Math.round(comm*22)/100;var commLord=comm+iva;$("ipt").textContent=eur(ipt);$("commout").textContent=eur(comm);$("ivaout").textContent=eur(iva);$("commlordout").textContent=eur(commLord);$("total").textContent=eur(ipt+107.11+commLord);$("result").style.display="block";
 }
