@@ -1,4 +1,4 @@
-const CACHE_NAME = 'preventivatore-agenzia-v3';
+const CACHE_NAME = 'preventivatore-agenzia-v4';
 const ASSETS = [
   './',
   './index.html',

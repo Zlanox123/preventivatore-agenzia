@@ -144,6 +144,12 @@ button{cursor:pointer;border:0;border-radius:10px;padding:13px 18px;font-size:16
 <option value="Vicenza">Vicenza</option>
 <option value="Viterbo">Viterbo</option></select></div>
 <div><label>Tipo veicolo</label><select id="tipo"><option value="auto">Autovettura / autoveicolo</option><option value="truck">Autocarro / trasporto cose</option></select></div>
+<div class="full">
+  <label style="display:flex;align-items:center;gap:10px;margin:2px 0 0;cursor:pointer">
+    <input id="art2688" type="checkbox" style="width:20px;height:20px;accent-color:#1688d4">
+    <span>Art. 2688 c.c. — raddoppia IPT</span>
+  </label>
+</div>
 <div id="kwbox"><label>Potenza (kW)</label><input id="kw" type="number" min="1" step="1" placeholder="es. 110"></div>
 <div id="portbox" style="display:none"><label>Portata (kg)</label><input id="port" type="number" min="1" step="1" placeholder="es. 1250"></div>
 <div><label>Commissione agenzia imponibile (€)</label><input id="comm" type="number" min="0" step="0.01" placeholder="es. 80"></div>
@@ -163,7 +169,7 @@ button{cursor:pointer;border:0;border-radius:10px;padding:13px 18px;font-size:16
 <div class="total"><span>TOTALE</span><span id="total">€ 0,00</span></div>
 <div class="actions"><button id="copy" class="secondary">Copia preventivo</button><button class="secondary" onclick="window.print()">Stampa</button><button id="reset" class="secondary">Azzera</button></div>
 </div>
-<p class="note">Versione per passaggi ordinari. Calcolo IPT autoveicoli oltre 53 kW con coefficiente 3,5119 e arrotondamento finale all’euro. Non applica automaticamente esenzioni, riduzioni o casistiche speciali. Le spese fisse escluse IPT e commissione sono € 107,11. L’IVA al 22% viene calcolata automaticamente sulla commissione agenzia più € 2,35 di digitalizzazione pratica.</p>
+<p class="note">Versione per passaggi ordinari. Calcolo IPT autoveicoli oltre 53 kW con coefficiente 3,5119 e arrotondamento finale all’euro. Non applica automaticamente esenzioni, riduzioni o casistiche speciali. Le spese fisse escluse IPT e commissione sono € 107,11. L’IVA al 22% viene calcolata automaticamente sulla commissione agenzia più € 2,35 di digitalizzazione pratica. Attivando Art. 2688 c.c. viene raddoppiata esclusivamente l’IPT.</p>
 </section></main>
 <script>
 (function(){
@@ -178,15 +184,18 @@ function calc(){
  var pct=rates[$("prov").value]||0, base=0, val;
  if($("tipo").value==="auto"){val=parseFloat($("kw").value);if(!(val>0)){alert("Inserisci la potenza in kW.");return;}base=val<=53?150.81:3.5119*val;}
  else{val=parseFloat($("port").value);if(!(val>0)){alert("Inserisci la portata in kg.");return;}base=truckBase(val/100);}
- var ipt=Math.round(base*(1+pct/100)), comm=parseFloat($("comm").value);if(!(comm>=0))comm=0;
+ var ipt=Math.round(base*(1+pct/100));
+ if($("art2688").checked) ipt=ipt*2;
+ var comm=parseFloat($("comm").value);if(!(comm>=0))comm=0;
  var ivaBase=comm+2.35;var iva=Math.round(ivaBase*22)/100;$("ipt").textContent=eur(ipt);$("commout").textContent=eur(comm);$("ivabaseout").textContent=eur(ivaBase);$("ivaout").textContent=eur(iva);$("total").textContent=eur(ipt+107.11+comm+iva);$("result").style.display="block";
 }
 $("calculate").addEventListener("click",calc);
 $("prov").addEventListener("change",updateBadge);
 $("tipo").addEventListener("change",switchType);
-$("reset").addEventListener("click",function(){$("kw").value="";$("port").value="";$("comm").value="";$("result").style.display="none";});
+$("reset").addEventListener("click",function(){$("kw").value="";$("port").value="";$("comm").value="";$("art2688").checked=false;$("result").style.display="none";});
 $("copy").addEventListener("click",function(){
- var text="PREVENTIVO PASSAGGIO DI PROPRIETÀ\nProvincia: "+$("prov").value+"\nIPT: "+$("ipt").textContent+"\nEmolumenti ACI: € 27,00\nSpese Motorizzazione: € 61,76\nImposta di bollo: € 16,00\nDigitalizzazione pratica: € 2,35\nCommissione agenzia imponibile: "+$("commout").textContent+"\nImponibile IVA (commissione + digitalizzazione): "+$("ivabaseout").textContent+"\nIVA 22%: "+$("ivaout").textContent+"\nTOTALE: "+$("total").textContent;
+ var text="PREVENTIVO PASSAGGIO DI PROPRIETÀ\nProvincia: "+$("prov").value+
+ ($("art2688").checked?"\nArt. 2688 c.c.: Sì":"\nArt. 2688 c.c.: No")+"\nIPT: "+$("ipt").textContent+"\nEmolumenti ACI: € 27,00\nSpese Motorizzazione: € 61,76\nImposta di bollo: € 16,00\nDigitalizzazione pratica: € 2,35\nCommissione agenzia imponibile: "+$("commout").textContent+"\nImponibile IVA (commissione + digitalizzazione): "+$("ivabaseout").textContent+"\nIVA 22%: "+$("ivaout").textContent+"\nTOTALE: "+$("total").textContent;
  if(navigator.clipboard)navigator.clipboard.writeText(text).then(function(){alert("Preventivo copiato.");},function(){window.prompt("Copia il preventivo:",text);});
  else window.prompt("Copia il preventivo:",text);
 });
